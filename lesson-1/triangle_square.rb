@@ -1,8 +1,8 @@
 puts "Введите основание треугольника:"
-a = gets.chomp
+base = gets.to_f
 
 puts "Введите высоту треугольника:"
-h = gets.chomp
+height = gets.to_f
 
-s = 0.5 * a.to_i * h.to_i
-puts "Площадь: #{s}"
+area = 0.5 * base * height
+puts "Площадь: #{area}"
