@@ -7,34 +7,22 @@ b = gets.to_f
 puts "Введите третью сторону треугольника:"
 c = gets.to_f
 
-if a + b <= c || a + c <= b || b + c <= a
+cathetus_a, cathetus_b, hypotenuse = [a, b, c].sort!
+
+if cathetus_a + cathetus_b <= hypotenuse
   abort("Такого треугольника не существует!")
 end
 
-cat_a, cat_b, hyp = [a, b, c].sort!
-flags = { "90deg" => false, "twosides" => false, "allsides" => false }
+right_triangle = cathetus_a**2 + cathetus_b**2 == hypotenuse**2
+right_isosceles_triangle = right_triangle && cathetus_a == cathetus_b
+equilateral_triangle = cathetus_a == hypotenuse
 
-if cat_a ** 2 + cat_b ** 2 == hyp ** 2
-  flags["90deg"] = true
-end
-
-if cat_a == cat_b && cat_a != hyp || cat_a == hyp && cat_a != cat_b || cat_b == hyp && cat_b != cat_a
-  flags["twosides"] = true
-end
-
-if cat_a == cat_b && cat_a == hyp
-  flags["allsides"] = true
-end
-
-if flags["90deg"] && flags["twosides"]
+if right_isosceles_triangle
   puts "Треугольник прямоугольный и равнобедренный"
-elsif flags["90deg"]
+elsif right_triangle
   puts "Треугольник прямоугольный"
-elsif flags["twosides"]
-  puts "Треугольник равнобедренный"
-elsif flags["allsides"]
+elsif equilateral_triangle
   puts "Треугольник равносторонний"
 else
   puts "Треугольник никакой"
 end
-    
