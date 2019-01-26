@@ -9,17 +9,7 @@ year = gets.to_i
 
 months_day_count = [31, 28, 31, 30, 31, 30, 31, 31, 30, 31, 30, 31]
 
-order = day
-for i in 0..month-2
-  order += months_day_count[i]
-end
+is_leap = year % 4 == 0 && year % 100 != 0 || year % 400 == 0
+months_day_count[1] += 1 if is_leap
 
-if month > 2
-  if year % 4 == 0
-    unless (year % 100 == 0) and (year % 100 != 0)
-      order += 1
-    end
-  end
-end
-
-puts "Порядковый номер даты #{day}.#{month}.#{year}: #{order}"
+puts "Порядковый номер даты #{day}.#{month}.#{year}: #{months_day_count.take(month -1).sum + day}"
