@@ -12,4 +12,5 @@ months_day_count = [31, 28, 31, 30, 31, 30, 31, 31, 30, 31, 30, 31]
 is_leap = year % 4 == 0 && year % 100 != 0 || year % 400 == 0
 months_day_count[1] += 1 if is_leap
 
-puts "Порядковый номер даты #{day}.#{month}.#{year}: #{months_day_count.take(month -1).sum + day}"
+day_number = months_day_count.take(month - 1).sum + day
+puts "Порядковый номер даты #{day}.#{month}.#{year}: #{day_number}"

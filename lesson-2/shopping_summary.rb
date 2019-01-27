@@ -1,12 +1,10 @@
-shopping_cart = Hash.new
+shopping_cart = {}
 
 loop do
   puts "Введите название товара:"
   name = gets.chomp
 
-  if name == "stop"
-    break
-  end
+  break if name == "stop"
 
   puts "Введите цену за единицу:"
   price_input = gets.to_i
@@ -17,11 +15,12 @@ loop do
   shopping_cart[name] = {price: price_input, qty: qty_input}
 end
 
-summary = 0.0
+total = 0.0
 puts shopping_cart
 shopping_cart.each do |name, prices|
-  summary += prices[:price] * prices[:qty]
-  puts "Итого за #{name}: #{prices[:price] * prices[:qty]}"
+  product_total = prices[:price] * prices[:qty]
+  total += product_total
+  puts "Итого за #{name}: #{product_total}"
 end
 
-puts "Всего за покупки: #{summary}"
+puts "Всего за покупки: #{total}"
