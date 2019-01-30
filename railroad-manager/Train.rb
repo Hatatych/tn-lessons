@@ -9,11 +9,11 @@ class Train
   end
 
   def gain_speed(speed_delta)
-    @speed += speed_delta
+    @speed += speed_delta if speed_delta > 0
   end
 
   def lose_speed(speed_delta)
-    @speed -= speed_delta if @speed > speed_delta
+    @speed -= speed_delta if @speed > speed_delta && speed_delta > 0
   end
 
   def stop # Может останавливаться
