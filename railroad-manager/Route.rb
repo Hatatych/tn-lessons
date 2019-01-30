@@ -12,7 +12,7 @@ class Route
   end
 
   def delete_station(station) # Может удалять промежуточную станцию
-    @stations.delete(station) if station != @first_station || station != @last_station
+    @stations.delete(station) unless edge_station?(station)
   end
 
   def first_station?(station) # Хелперы для определения конечных станций
@@ -23,11 +23,15 @@ class Route
     @last_station == station
   end
 
-  def next_station_name(at_station) # Хелперы для возврата названия соседних станций
-    self.stations[at_station + 1].name
+  def edge_station?(station) # Хелпер для определения крайности станции
+    first_station?(station) || last_station?(station)
   end
 
-  def previous_station_name(at_station)
-    self.stations[at_station - 1].name
+  def next_station(at_station) # Хелперы для возврата названия соседних станций
+    stations[at_station + 1] unless stations[at_station] == stations.last
+  end
+
+  def previous_station(at_station)
+    stations[at_station - 1] unless stations[at_station] == stations.first
   end
 end

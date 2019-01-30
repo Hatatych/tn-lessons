@@ -1,6 +1,5 @@
 class Station
-  attr_reader :trains # Может возвращать список всех поездов на станции на текущий момент
-  attr_reader :name
+  attr_reader :trains, :name # Может возвращать список всех поездов на станции на текущий момент
 
   def initialize(name)
     @name = name # Имеет название, которое указывается при создании
@@ -11,15 +10,16 @@ class Station
     @trains << train
   end
 
-  def trains_by_type # Может возвращать кол-во поездов по типу
-    cargo = 0
-    civil = 0
-    @trains.each do |train|
-      cargo += 1 if train.type == "cargo"
-      civil += 1 if train.type == "civil"
+  def trains_by_type(type) # Может возвращать кол-во поездов по типу
+    cargo = @trains.select { |train| train.type == type }
+  end
+
+  def print_trains_by_type # Печатает кол-во поездов по типу
+    types = @trains.map(&:type).uniq
+    types.each do |type|
+      qty = trains_by_type(type).size
+      puts "#{type}: #{qty}"
     end
-    puts "Грузовых: #{cargo}"
-    puts "Пассажирских: #{civil}"
   end
 
   def send_train(train) # Может отправлять поезда
