@@ -11,7 +11,7 @@ class Station
   end
 
   def trains_by_type(type) # Может возвращать кол-во поездов по типу
-    cargo = @trains.select { |train| train.type == type }
+    @trains.select { |train| train.type == type }
   end
 
   def print_trains_by_type # Печатает кол-во поездов по типу
