@@ -14,14 +14,6 @@ class Station
     @trains.select { |train| train.type == type }
   end
 
-  def print_trains_by_type # Печатает кол-во поездов по типу
-    types = @trains.map(&:type).uniq
-    types.each do |type|
-      qty = trains_by_type(type).size
-      puts "#{type}: #{qty}"
-    end
-  end
-
   def send_train(train) # Может отправлять поезда
     @trains.delete(train)
   end

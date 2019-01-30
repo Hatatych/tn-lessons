@@ -27,11 +27,15 @@ class Route
     first_station?(station) || last_station?(station)
   end
 
-  def next_station(at_station) # Хелперы для возврата названия соседних станций
-    stations[at_station + 1] unless stations[at_station] == stations.last
+  def next_station(station_index) # Хелперы для возврата названия соседних станций
+    @stations[station_index + 1]
   end
 
-  def previous_station(at_station)
-    stations[at_station - 1] unless stations[at_station] == stations.first
+  def previous_station(station_index)
+    @stations[station_index - 1]
+  end
+
+  def current_station(station_index)
+    @stations[station_index]
   end
 end

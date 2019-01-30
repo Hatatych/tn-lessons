@@ -13,7 +13,8 @@ class Train
   end
 
   def lose_speed(speed_delta)
-    @speed -= speed_delta if @speed > speed_delta && speed_delta > 0
+    return unless @speed >= speed_delta && speed_delta > 0
+    @speed -= speed_delta
   end
 
   def stop # Может останавливаться
@@ -35,23 +36,21 @@ class Train
   end
 
   def move_forward # Может двигаться вперед
-    unless @route.stations[@at_station + 1].nil?
-      current_station.send_train(self)
-      next_station.take_train(self)
-      @at_station += 1
-    end
+    return unless next_station
+    current_station.send_train(self)
+    next_station.take_train(self)
+    @at_station += 1
   end
 
   def move_backwards # Может двигаться назад
-    unless @route.stations[@at_station - 1].nil?
-      current_station.send_train(self)
-      previous_station.take_train(self)
-      @at_station -= 1
-    end
+    return unless previous_station
+    current_station.send_train(self)
+    previous_station.take_train(self)
+    @at_station -= 1
   end
 
   def current_station
-    @route.stations[@at_station]
+    @route.current_station(@at_station)
   end
 
   def next_station
