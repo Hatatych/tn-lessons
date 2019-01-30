@@ -5,10 +5,15 @@ class Train
     @name = name
     @type = type
     @carriages = carriages
+    stop
   end
 
   def gain_speed(speed_delta)
     @speed += speed_delta
+  end
+
+  def lose_speed(speed_delta)
+    @speed -= speed_delta if @speed > speed_delta
   end
 
   def stop # Может останавливаться
