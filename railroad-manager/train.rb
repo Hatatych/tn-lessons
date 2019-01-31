@@ -1,10 +1,9 @@
 class Train
   attr_reader :speed, :carriages, :type # Может возвращать текущую скорость и кол-во вагонов
 
-  def initialize(name, type, carriages) # Название, тип и кол-во вагонов при инициализации
+  def initialize(name) # Название, тип и кол-во вагонов при инициализации
     @name = name
-    @type = type
-    @carriages = carriages
+    @carriages = []
     stop
   end
 
@@ -21,12 +20,12 @@ class Train
     @speed = 0
   end
 
-  def add_carriage # Может прицеплять вагон
-    @carriages += 1 if speed == 0
+  def add_carriage(carriage) # Может прицеплять вагон
+    @carriages << carriage if speed == 0 && @type == carriage.type
   end
 
-  def remove_carriage # Может отцеплять вагон
-    @carriages -= 1 if speed == 0 && @carriages > 0
+  def remove_carriage(carriage) # Может отцеплять вагон
+    @carriages.delete(carriage) if speed == 0 && @carriages.include?(carriage)
   end
 
   def assign_route(route) # Может принимать маршрут следования
@@ -49,6 +48,9 @@ class Train
     @at_station -= 1
   end
 
+  protected
+
+  # В протектед так как хелперы используются исключительно внутри объекта
   def current_station
     @route.current_station(@at_station)
   end
