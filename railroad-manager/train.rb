@@ -21,7 +21,8 @@ class Train
   end
 
   def add_carriage(carriage) # Может прицеплять вагон
-    @carriages << carriage if speed == 0 && @type == carriage.type
+    return unless @speed == 0
+    @carriages << carriage if attachable_carriage?(carriage)
   end
 
   def remove_carriage(carriage) # Может отцеплять вагон
@@ -51,6 +52,7 @@ class Train
   protected
 
   # В протектед так как хелперы используются исключительно внутри объекта
+  # Но могут вызываться из экземпляров дочерних классов
   def current_station
     @route.current_station(@at_station)
   end

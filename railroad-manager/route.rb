@@ -3,8 +3,6 @@ class Route
 
   def initialize(first_station, last_station) # Начальная и конечная станции при инициализации
     @stations = [first_station, last_station]
-    @first_station = first_station
-    @last_station = last_station
   end
 
   def add_station(station) # Может добавлять промежуточную станцию
@@ -31,11 +29,11 @@ class Route
 
   # Все три метода в private, так как являются хелперами, не рекомендуемыми к использованию извне
   def first_station?(station) # Хелперы для определения конечных станций
-    @first_station == station
+    @stations.first == station
   end
 
   def last_station?(station)
-    @last_station == station
+    @stations.last == station
   end
 
   def edge_station?(station) # Хелпер для определения крайности станции
