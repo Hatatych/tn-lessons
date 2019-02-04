@@ -49,6 +49,10 @@ class Train
     @at_station -= 1
   end
 
+  def to_s
+    "#{@name}, #{@type}, #{@carriages.length} вагонов"
+  end
+
   protected
 
   # В протектед так как хелперы используются исключительно внутри объекта

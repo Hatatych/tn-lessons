@@ -25,6 +25,10 @@ class Route
     @stations[station_index]
   end
 
+  def to_s
+    "#{@stations.first.name} => #{@stations.last.name}"
+  end
+
   private
 
   # Все три метода в private, так как являются хелперами, не рекомендуемыми к использованию извне

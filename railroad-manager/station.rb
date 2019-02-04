@@ -17,4 +17,8 @@ class Station
   def send_train(train) # Может отправлять поезда
     @trains.delete(train)
   end
+
+  def to_s
+    @name
+  end
 end
