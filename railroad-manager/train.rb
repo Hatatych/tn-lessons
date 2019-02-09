@@ -1,10 +1,23 @@
 class Train
-  attr_reader :speed, :carriages, :type # Может возвращать текущую скорость и кол-во вагонов
+  include Manufacturer
+  include InstanceCounter
+  attr_reader :speed, :carriages, :type, :name # Может возвращать текущую скорость и кол-во вагонов
+
+  @@all_trains = []
+  # Насчет этого решения я не уверен!
+  initialize_counter # инициализация начального значения счетчика экземпляров
+
+  def self.find(name)
+    @@all_trains.each { |train| return train if train.name == name }
+    nil
+  end
 
   def initialize(name) # Название, тип и кол-во вагонов при инициализации
     @name = name
     @carriages = []
     stop
+    @@all_trains << self
+    register_instance
   end
 
   def gain_speed(speed_delta)
