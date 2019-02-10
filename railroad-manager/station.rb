@@ -3,8 +3,6 @@ class Station
   attr_reader :trains, :name # Может возвращать список всех поездов на станции на текущий момент
 
   @@all_stations = []
-  # Насчет этого решения я не уверен!
-  initialize_counter # инициализация начального значения счетчика экземпляров
 
   def self.all
     @@all_stations

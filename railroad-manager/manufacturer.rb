@@ -1,5 +1,5 @@
 module Manufacturer
-  attr_reader :manufacturer
+  attr_accessor :manufacturer
 
   def set_manufacturer(name)
     self.manufacturer = name

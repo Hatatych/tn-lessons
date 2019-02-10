@@ -2,9 +2,6 @@ class Route
   include InstanceCounter
   attr_reader :stations # Может выводить список всех станций
 
-  # Насчет этого решения я не уверен!
-  initialize_counter # инициализация начального значения счетчика экземпляров
-
   def initialize(first_station, last_station) # Начальная и конечная станции при инициализации
     @stations = [first_station, last_station]
     register_instance
