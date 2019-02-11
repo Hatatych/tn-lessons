@@ -4,7 +4,11 @@ class Train
   attr_reader :speed, :carriages, :type, :name # Может возвращать текущую скорость и кол-во вагонов
 
   @@all_trains = {}
-  NAME_FORMAT = /^([a-z]|\d){3}(-){0,1}([a-z]|\d){2}$/i
+  NAME_FORMAT = /^[a-z\d]{3}-?[a-z\d]{2}$/i
+  NIL_NUMBER = "Номер не может быть пустым!"
+  WRONG_LENGTH = "Номер может быть 5 или 6 символов длиной!"
+  WRONG_FORMAT = "Номер имеет недопустимый формат!"
+  NIL_TYPE = "Не указан тип поезда!"
 
   def self.find(name)
     @@all_trains[name]
@@ -75,10 +79,10 @@ class Train
   protected
 
   def validate!
-    raise "Номер не может быть пустым!" if @name.nil?
-    raise "Номер может быть 5 или 6 символов длиной!" if @name.length < 5 && @name.length > 6
-    raise "Номер имеет недопустимый формат!" if @name !~ NAME_FORMAT
-    raise "Не указан тип поезда!" if @type.nil?
+    raise NIL_NUMBER if @name.nil?
+    raise WRONG_LENGTH if @name.length < 5 && @name.length > 6
+    raise WRONG_FORMAT if @name !~ NAME_FORMAT
+    raise NIL_TYPE if @type.nil?
   end
 
   def current_station

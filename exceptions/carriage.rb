@@ -2,6 +2,8 @@ class Carriage
   include Manufacturer
   attr_reader :type
 
+  NIL_TYPE = "Не указан тип вагона!"
+
   def initialize
     validate!
   end
@@ -20,6 +22,6 @@ class Carriage
   protected
 
   def validate!
-    raise "Не указан тип вагона!" if @type.nil?
+    raise NIL_TYPE if @type.nil?
   end
 end

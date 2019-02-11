@@ -35,33 +35,9 @@ class App
       main_choice = gets.to_i
     
       case main_choice
-      when 1
-        begin
-          create_station
-        rescue RuntimeError => e
-          show_error(e)
-          retry
-        ensure
-          puts "Станция создана: #{@stations.last}!"
-        end
-      when 2 # Нужен ли в этом случае begin или when уже считается началом блока как def?
-        begin
-          create_train
-        rescue RuntimeError => e
-          show_error(e)
-          retry
-        ensure
-          puts "Поезд создан: #{@trains.last}!"
-        end
-      when 3 
-        begin
-          create_route
-        rescue RuntimeError => e
-          show_error(e)
-          retry
-        ensure
-          puts "Маршрут создан: #{@routes.last}!"
-        end
+      when 1 then create_station
+      when 2 then create_train
+      when 3 then create_route
       when 4 then add_to_route
       when 5 then delete_from_route
       when 6 then assign_route
@@ -69,20 +45,14 @@ class App
       when 8 then remove_carriage
       when 9 then move_train
       when 10 then show_stations
-      when 11
-        begin
-          create_carriage
-        rescue RuntimeError => e
-          show_error(e)
-          retry
-        ensure
-          puts "Вагон создан: #{@carriages.last}!"
-        end
+      when 11 then create_carriage
       when 0 then abort("Выходим")
       else puts INVALID_MENU
       end
     end
   end
+
+  private
 
   def create_train
     show_array(TYPE_CHOICE, "Какой поезд создаем?")
@@ -93,9 +63,12 @@ class App
     when 2 then @trains << CargoTrain.new(gets.chomp)
     else puts INVALID_INDEX
     end
+  rescue RuntimeError => e
+    show_error(e)
+    retry
+  else
+    puts "Поезд создан: #{@trains.last}!"
   end
-
-  private
 
   def show_error(e)
     puts "Введены неверные данные, попробуйте снова!"
@@ -105,6 +78,11 @@ class App
   def create_station
     puts "Введите название станции:"
     @stations << Station.new(gets.chomp.capitalize)
+  rescue RuntimeError => e
+    show_error(e)
+    retry
+  else
+    puts "Станция создана: #{@stations.last}!"
   end
 
   def create_carriage
@@ -115,6 +93,11 @@ class App
     when 2 then @carriages << CargoCarriage.new
     else puts INVALID_INDEX
     end
+  rescue RuntimeError => e
+    show_error(e)
+    retry
+  else
+    puts "Вагон создан: #{@carriages.last}!"
   end
 
   def create_route
@@ -125,6 +108,11 @@ class App
     last_station = select_from_array(@stations)
     return if first_station.nil? || last_station.nil?
     @routes << Route.new(first_station, last_station)
+  rescue RuntimeError => e
+    show_error(e)
+    retry
+  else
+    puts "Маршрут создан: #{@routes.last}!"
   end
 
   def add_to_route

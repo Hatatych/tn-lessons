@@ -4,6 +4,7 @@ class Station
 
   @@all_stations = []
   NAME_FORMAT = /^[a-z]+$/i
+  WRONG_FORMAT = "Название может содержать только буквы!"
 
   def self.all
     @@all_stations
@@ -43,6 +44,6 @@ class Station
   private
 
   def validate!
-    raise "Название может содержать только буквы!" if @name !~ NAME_FORMAT
+    raise WRONG_FORMAT if @name !~ NAME_FORMAT
   end
 end
