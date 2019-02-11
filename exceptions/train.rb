@@ -79,8 +79,6 @@ class Train
   protected
 
   def validate!
-    raise NIL_NUMBER if @name.nil?
-    raise WRONG_LENGTH if @name.length < 5 && @name.length > 6
     raise WRONG_FORMAT if @name !~ NAME_FORMAT
     raise NIL_TYPE if @type.nil?
   end
