@@ -2,10 +2,10 @@ require_relative './manufacturer.rb'
 
 class Carriage
   include Manufacturer
-  attr_reader :type
+  attr_reader :type, :free_volume
 
   NIL_TYPE = "Не указан тип вагона!"
-  NO_VOLUME = "Недостаточно свободного объема!"
+  NO_VOLUME = "Недостаточно свободного объема или мест!"
   NEGATIVE_VOLUME = "Начальный объем/кол-во мест не может быть меньше 1!"
 
   def initialize(volume)

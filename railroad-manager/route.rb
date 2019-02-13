@@ -12,6 +12,10 @@ class Route
     register_instance
   end
 
+  def each_station
+    @stations.each { |station| yield station }
+  end
+
   def add_station(station) # Может добавлять промежуточную станцию
     @stations.insert(-2, station)
   end

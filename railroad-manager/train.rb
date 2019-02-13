@@ -84,7 +84,7 @@ class Train
   protected
 
   def validate!
-    raise WRONG_FORMAT if @name !~ NAME_FORMAT
+    raise WRONG_FORMAT unless NAME_FORMAT.match? @name
     raise NIL_TYPE if @type.nil?
   end
 
