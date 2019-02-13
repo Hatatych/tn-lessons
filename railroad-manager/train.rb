@@ -1,24 +1,31 @@
+require_relative './manufacturer.rb'
+require_relative './instance_counter.rb'
+
 class Train
   include Manufacturer
   include InstanceCounter
   attr_reader :speed, :carriages, :type, :name # Может возвращать текущую скорость и кол-во вагонов
 
   @@all_trains = {}
-
-  def self.all_trains
-    @@all_trains
-  end
+  NAME_FORMAT = /^[a-z\d]{3}-?[a-z\d]{2}$/i
+  WRONG_FORMAT = "Номер имеет недопустимый формат!"
+  NIL_TYPE = "Не указан тип поезда!"
 
   def self.find(name)
     @@all_trains[name]
   end
 
   def initialize(name) # Название, тип и кол-во вагонов при инициализации
-    @name = name
+    @name = name.to_s
+    validate!
     @carriages = []
     stop
     @@all_trains[name] = self
     register_instance
+  end
+
+  def each_carriage
+    @carriages.each { |carriage| yield carriage }
   end
 
   def gain_speed(speed_delta)
@@ -67,10 +74,20 @@ class Train
     "#{@name}, #{@type}, #{@carriages.length} вагонов"
   end
 
+  def valid?
+    validate!
+    true
+  rescue
+    false
+  end
+
   protected
 
-  # В протектед так как хелперы используются исключительно внутри объекта
-  # Но могут вызываться из экземпляров дочерних классов
+  def validate!
+    raise WRONG_FORMAT if @name !~ NAME_FORMAT
+    raise NIL_TYPE if @type.nil?
+  end
+
   def current_station
     @route.current_station(@at_station)
   end

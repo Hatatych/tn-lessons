@@ -1,9 +1,14 @@
+require_relative './instance_counter.rb'
+
 class Route
   include InstanceCounter
   attr_reader :stations # Может выводить список всех станций
 
+  NIL_STATIONS = "Начальная или конечная станция маршрута не задана!"
+
   def initialize(first_station, last_station) # Начальная и конечная станции при инициализации
     @stations = [first_station, last_station]
+    validate!
     register_instance
   end
 
@@ -31,7 +36,18 @@ class Route
     "#{@stations.first.name} => #{@stations.last.name}"
   end
 
+  def valid?
+    validate!
+    true
+  rescue
+    false
+  end
+
   private
+
+  def validate!
+    raise NIL_STATIONS if @stations.first.nil? || @stations.last.nil?
+  end
 
   # Все три метода в private, так как являются хелперами, не рекомендуемыми к использованию извне
   def first_station?(station) # Хелперы для определения конечных станций

@@ -1,8 +1,8 @@
 class PassengerTrain < Train
 
   def initialize(name)
-    super
     @type = :passenger
+    super
   end
 
   def attachable_carriage?(carriage)

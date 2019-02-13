@@ -1,4 +1,4 @@
-require_relative './loader.rb'
+require_relative './app.rb'
 
 app = App.new
 app.run

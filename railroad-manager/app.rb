@@ -25,9 +25,7 @@ class App
     puts "8. Отцепить вагон от поезда"
     puts "9. Переместить поезд"
     puts "10. Показать список станций и поездов на них"
-    puts
-    puts "11. Вывести всю имеющуюся инфу"
-    puts "12. Создать вагон"
+    puts "11. Создать вагон"
     puts "0. Выйти из программы"
   end
 
@@ -35,7 +33,7 @@ class App
     loop do
       print_menu
       main_choice = gets.to_i
-    
+
       case main_choice
       when 1 then create_station
       when 2 then create_train
@@ -47,7 +45,7 @@ class App
       when 8 then remove_carriage
       when 9 then move_train
       when 10 then show_stations
-      when 12 then create_carriage
+      when 11 then create_carriage
       when 0 then abort("Выходим")
       else puts INVALID_MENU
       end
@@ -55,11 +53,6 @@ class App
   end
 
   private
-
-  def create_station
-    puts "Введите название станции:"
-    @stations << Station.new(gets.chomp.capitalize)
-  end
 
   def create_train
     show_array(TYPE_CHOICE, "Какой поезд создаем?")
@@ -70,16 +63,58 @@ class App
     when 2 then @trains << CargoTrain.new(gets.chomp)
     else puts INVALID_INDEX
     end
+  rescue RuntimeError => e
+    show_error(e)
+    retry
+  else
+    puts "Поезд создан: #{@trains.last}!"
+  end
+
+  def show_error(e)
+    puts "Введены неверные данные, попробуйте снова!"
+    puts e.message
+  end
+
+  def create_station
+    puts "Введите название станции:"
+    @stations << Station.new(gets.chomp.capitalize)
+  rescue RuntimeError => e
+    show_error(e)
+    retry
+  else
+    puts "Станция создана: #{@stations.last}!"
   end
 
   def create_carriage
     show_array(TYPE_CHOICE, "Какой вагон создаем?")
     carriage_choice = gets.to_i
     case carriage_choice
-    when 1 then @carriages << PassengerCarriage.new
-    when 2 then @carriages << CargoCarriage.new
+    when 1 then @carriages << PassengerCarriage.new(seats_volume_input("мест"))
+    when 2 then @carriages << CargoCarriage.new(seats_volume_input("объем"))
     else puts INVALID_INDEX
     end
+  rescue RuntimeError => e
+    show_error(e)
+    retry
+  else
+    puts "Вагон создан: #{@carriages.last}!"
+  end
+
+  def seats_volume_input(input_title)
+    puts "Сколько #{input_title}?"
+    gets.to_i
+  end
+
+  def take_seat_or_load(carriage)
+    if carriage.instance_of?(PassengerCarriage)
+      carriage.take_seat
+    elsif carriage.instance_of?(CargoCarriage)
+      puts "Сколько грузим?"
+      carriage.load(gets.to_i)
+    else puts INVALID_INDEX
+    end
+    rescue RuntimeError => e
+      show_error(e)
   end
 
   def create_route
@@ -90,6 +125,11 @@ class App
     last_station = select_from_array(@stations)
     return if first_station.nil? || last_station.nil?
     @routes << Route.new(first_station, last_station)
+  rescue RuntimeError => e
+    show_error(e)
+    retry
+  else
+    puts "Маршрут создан: #{@routes.last}!"
   end
 
   def add_to_route

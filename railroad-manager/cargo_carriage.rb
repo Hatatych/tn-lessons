@@ -1,5 +1,9 @@
 class CargoCarriage < Carriage
-  def initialize
-    @type = "cargo"
+
+  attr_reader :free_volume, :occupied_volume
+
+  def initialize(volume)
+    @type = :cargo
+    super
   end
 end
