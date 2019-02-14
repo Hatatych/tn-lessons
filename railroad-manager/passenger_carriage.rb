@@ -1,5 +1,4 @@
 class PassengerCarriage < Carriage
-  NO_SEATS = "Недостаточно свободных мест!"
   attr_reader :free_seats, :occupied_seats
 
   def initialize(seats)

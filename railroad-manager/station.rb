@@ -50,6 +50,6 @@ class Station
   private
 
   def validate!
-    raise WRONG_FORMAT if @name !~ NAME_FORMAT
+    raise WRONG_FORMAT unless NAME_FORMAT.match? @name
   end
 end
