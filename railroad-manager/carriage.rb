@@ -4,9 +4,9 @@ class Carriage
   include Manufacturer
   attr_reader :type, :free_volume
 
-  NIL_TYPE = "Не указан тип вагона!"
-  NO_VOLUME = "Недостаточно свободного объема или мест!"
-  NEGATIVE_VOLUME = "Начальный объем/кол-во мест не может быть меньше 1!"
+  NIL_TYPE = 'Не указан тип вагона!'.freeze
+  NO_VOLUME = 'Недостаточно свободного объема или мест!'.freeze
+  NEGATIVE_VOLUME = 'Начальный объем/кол-во мест не может быть меньше 1!'.freeze
 
   def initialize(volume)
     @free_volume = volume
@@ -15,12 +15,13 @@ class Carriage
   end
 
   def to_s
-    "#{@type}"
+    @type.to_s
   end
 
   def load(volume)
     raise NEGATIVE_VOLUME if volume < 0
     raise NO_VOLUME if volume > @free_volume
+
     @free_volume -= volume
     @occupied_volume += volume
   end
@@ -28,7 +29,7 @@ class Carriage
   def valid?
     validate!
     true
-  rescue
+  rescue StandardError
     false
   end
 
