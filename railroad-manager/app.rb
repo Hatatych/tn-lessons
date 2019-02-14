@@ -30,10 +30,10 @@ class App
       when 0 then abort("Выходим")
       else puts INVALID_MENU
       end
+    end
     rescue RuntimeError => e
       show_error e
       retry
-    end
   end
 
   private
