@@ -1,5 +1,4 @@
 class CargoCarriage < Carriage
-
   attr_reader :free_volume, :occupied_volume
 
   def initialize(volume)

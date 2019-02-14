@@ -2,11 +2,11 @@ require_relative './loader.rb'
 require_relative './menus.rb'
 
 class App
-  INVALID_INDEX = "Не понятно. Возвращение в главное меню"
-  INVALID_MENU = "Не понятно. Выберите снова"
-  MOVE_TRAIN_MENU = ["Вперед", "Назад"]
-  TYPE_CHOICE = ["Пассажирский", "Грузовой"]
-  DATA_EXISTS = "В программе уже есть данные, тестовые не созданы!"
+  INVALID_INDEX = 'Не понятно. Возвращение в главное меню'.freeze
+  INVALID_MENU = 'Не понятно. Выберите снова'.freeze
+  MOVE_TRAIN_MENU = %w[Вперед Назад].freeze
+  TYPE_CHOICE = %w[Пассажирский Грузовой].freeze
+  DATA_EXISTS = 'В программе уже есть данные, тестовые не созданы!'.freeze
 
   def initialize
     @stations = []
@@ -17,7 +17,7 @@ class App
 
   def run
     loop do
-      Menus::main_menu
+      Menus.main_menu
       main_choice = gets.to_i
 
       case main_choice
@@ -27,20 +27,20 @@ class App
       when 4 then carriage_menu
       when 5 then create_test_data
       when 6 then show_stations
-      when 0 then abort("Выходим")
+      when 0 then abort('Выходим')
       else puts INVALID_MENU
       end
     end
-    rescue RuntimeError => e
-      show_error e
-      retry
+  rescue RuntimeError => e
+    show_error e
+    retry
   end
 
   private
 
   def station_menu
     loop do
-      Menus::station_menu
+      Menus.station_menu
       menu_choice = gets.to_i
 
       case menu_choice
@@ -57,7 +57,7 @@ class App
 
   def route_menu
     loop do
-      Menus::route_menu
+      Menus.route_menu
       menu_choice = gets.to_i
 
       case menu_choice
@@ -71,7 +71,7 @@ class App
 
   def train_menu
     loop do
-      Menus::train_menu
+      Menus.train_menu
       menu_choice = gets.to_i
 
       case menu_choice
@@ -88,7 +88,7 @@ class App
 
   def carriage_menu
     loop do
-      Menus::carriage_menu
+      Menus.carriage_menu
       menu_choice = gets.to_i
 
       case menu_choice
@@ -103,15 +103,19 @@ class App
     end
   end
 
+  def no_data?
+    @stations.empty? && @routes.empty? && @trains.empty? && @carriages.empty?
+  end
+
   def create_test_data
-    if @stations.empty? && @routes.empty? && @trains.empty? && @carriages.empty?
-      @stations << Station.new("Pavshino")
-      @stations << Station.new("Tushino")
-      @stations << Station.new("Dmitrovskaya")
+    if no_data?
+      @stations << Station.new('Pavshino')
+      @stations << Station.new('Tushino')
+      @stations << Station.new('Dmitrovskaya')
       @routes << Route.new(@stations.first, @stations.last)
       @routes.first.add_station @stations[1]
-      @trains << PassengerTrain.new("HTT-01")
-      @trains << CargoTrain.new("HTT-02")
+      @trains << PassengerTrain.new('HTT-01')
+      @trains << CargoTrain.new('HTT-02')
       @trains.first.assign_route @routes.first
       @trains.last.assign_route @routes.first
       @carriages << PassengerCarriage.new(20)
@@ -123,7 +127,7 @@ class App
       @trains.last.add_carriage @carriages[2]
       @trains.last.add_carriage @carriages[3]
       puts
-      puts "Данные созданы"
+      puts 'Данные созданы'
     else
       raise DATA_EXISTS
     end
@@ -131,7 +135,7 @@ class App
 
   def display_carriages
     puts
-    show_array(@trains, "Какой поезд выбираем?")
+    show_array(@trains, 'Какой поезд выбираем?')
     train_choice = select_from_array(@trains)
     carriages_qty = 0
     train_choice.each_carriage do |carriage|
@@ -142,16 +146,16 @@ class App
 
   def show_trains_on_station
     puts
-    show_array(@stations, "Выберите станцию:")
+    show_array(@stations, 'Выберите станцию:')
     station_choice = select_from_array @stations
     station_choice.each_train { |train| puts train }
   end
 
   def create_train
     puts
-    show_array(TYPE_CHOICE, "Какой поезд создаем?")
+    show_array(TYPE_CHOICE, 'Какой поезд создаем?')
     train_choice = gets.to_i
-    puts "Введите название для поезда:"
+    puts 'Введите название для поезда:'
     case train_choice
     when 1 then @trains << PassengerTrain.new(gets.chomp)
     when 2 then @trains << CargoTrain.new(gets.chomp)
@@ -164,15 +168,15 @@ class App
     puts "Поезд создан: #{@trains.last}!"
   end
 
-  def show_error(e)
+  def show_error(err)
     puts
-    puts "Что-то пошло не так, попробуйте снова! Ошибка:"
-    puts e.message
+    puts 'Что-то пошло не так, попробуйте снова! Ошибка:'
+    puts err.message
   end
 
   def create_station
     puts
-    puts "Введите название станции:"
+    puts 'Введите название станции:'
     @stations << Station.new(gets.chomp.capitalize)
   rescue RuntimeError => e
     show_error(e)
@@ -183,11 +187,11 @@ class App
 
   def create_carriage
     puts
-    show_array(TYPE_CHOICE, "Какой вагон создаем?")
+    show_array(TYPE_CHOICE, 'Какой вагон создаем?')
     carriage_choice = gets.to_i
     case carriage_choice
-    when 1 then @carriages << PassengerCarriage.new(seats_volume_input("мест"))
-    when 2 then @carriages << CargoCarriage.new(seats_volume_input("объем"))
+    when 1 then @carriages << PassengerCarriage.new(seats_volume_input('мест'))
+    when 2 then @carriages << CargoCarriage.new(seats_volume_input('объем'))
     else puts INVALID_INDEX
     end
   rescue RuntimeError => e
@@ -205,27 +209,28 @@ class App
 
   def take_seat_or_load
     puts
-    show_array(@carriages, "Выберите вагон:")
+    show_array(@carriages, 'Выберите вагон:')
     carriage = select_from_array(@carriages)
     if carriage.instance_of?(PassengerCarriage)
       carriage.load
     elsif carriage.instance_of?(CargoCarriage)
-      puts "Сколько грузим?"
+      puts 'Сколько грузим?'
       carriage.load(gets.to_i)
     else puts INVALID_INDEX
     end
-    rescue RuntimeError => e
-      show_error(e)
+  rescue RuntimeError => e
+    show_error(e)
   end
 
   def create_route
     puts
-    show_array(@stations, "Список станций:")
-    puts "Введите индекс первой станции"
+    show_array(@stations, 'Список станций:')
+    puts 'Введите индекс первой станции'
     first_station = select_from_array(@stations)
-    puts "Введите индекс последней станции"
+    puts 'Введите индекс последней станции'
     last_station = select_from_array(@stations)
     return if first_station.nil? || last_station.nil?
+
     @routes << Route.new(first_station, last_station)
   rescue RuntimeError => e
     show_error(e)
@@ -236,54 +241,55 @@ class App
 
   def add_to_route
     puts
-    show_array(@routes, "Выберите маршрут:")
+    show_array(@routes, 'Выберите маршрут:')
     route_choice = select_from_array(@routes)
-    show_array(@stations, "Выберите станцию, которую добавить:")
+    show_array(@stations, 'Выберите станцию, которую добавить:')
     return puts INVALID_INDEX if route_choice.nil?
+
     route_choice.add_station(select_from_array(@stations))
   end
 
   def delete_from_route
     puts
-    show_array(@routes, "Выберите маршрут:")
+    show_array(@routes, 'Выберите маршрут:')
     route_choice = select_from_array(@routes)
-    show_array(route_choice.stations, "Выберите станцию, которую удалить")
+    show_array(route_choice.stations, 'Выберите станцию, которую удалить')
     station_choice = select_from_array(route_choice.stations)
     route_choice.delete_station(station_choice)
   end
 
   def assign_route
     puts
-    show_array(@trains, "Выберите поезд:")
+    show_array(@trains, 'Выберите поезд:')
     train_choice = select_from_array(@trains)
-    show_array(@routes, "Выберите поезд:")
+    show_array(@routes, 'Выберите поезд:')
     route_choice = select_from_array(@routes)
     train_choice.assign_route(route_choice)
   end
 
   def add_carriage
     puts
-    show_array(@trains, "Выберите поезд:")
+    show_array(@trains, 'Выберите поезд:')
     train_choice = select_from_array(@trains)
-    show_array(@carriages, "Выберите вагон:")
+    show_array(@carriages, 'Выберите вагон:')
     carriage_choice = select_from_array(@carriages)
     train_choice.add_carriage(carriage_choice)
   end
 
   def remove_carriage
     puts
-    show_array(@trains, "Выберите поезд:")
+    show_array(@trains, 'Выберите поезд:')
     train_choice = select_from_array(@trains)
-    show_array(train_choice.carriages, "Выберите вагон, который нужно отцепить:")
+    show_array(train_choice.carriages, 'Выберите вагон, который нужно отцепить:')
     carriage_choice = select_from_array(train_choice.carriages)
     train_choice.remove_carriage(carriage_choice)
   end
 
   def move_train
     puts
-    show_array(@trains, "Выберите поезд:")
+    show_array(@trains, 'Выберите поезд:')
     train_choice = select_from_array(@trains)
-    show_array(MOVE_TRAIN_MENU, "Куда едем?")
+    show_array(MOVE_TRAIN_MENU, 'Куда едем?')
     direction_choice = gets.to_i
     case direction_choice
     when 1 then train_choice.move_forward

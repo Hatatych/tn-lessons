@@ -2,11 +2,11 @@ require_relative './instance_counter.rb'
 
 class Route
   include InstanceCounter
-  attr_reader :stations # Может выводить список всех станций
+  attr_reader :stations
 
-  NIL_STATIONS = "Начальная или конечная станция маршрута не задана!"
+  NIL_STATIONS = 'Начальная или конечная станция маршрута не задана!'.freeze
 
-  def initialize(first_station, last_station) # Начальная и конечная станции при инициализации
+  def initialize(first_station, last_station)
     @stations = [first_station, last_station]
     validate!
     register_instance
@@ -16,15 +16,15 @@ class Route
     @stations.each { |station| yield station }
   end
 
-  def add_station(station) # Может добавлять промежуточную станцию
+  def add_station(station)
     @stations.insert(-2, station)
   end
 
-  def delete_station(station) # Может удалять промежуточную станцию
+  def delete_station(station)
     @stations.delete(station) unless edge_station?(station)
   end
 
-  def next_station(station_index) # Хелперы для возврата названия соседних станций
+  def next_station(station_index)
     @stations[station_index + 1]
   end
 
@@ -43,7 +43,7 @@ class Route
   def valid?
     validate!
     true
-  rescue
+  rescue StandardError
     false
   end
 
@@ -53,8 +53,7 @@ class Route
     raise NIL_STATIONS if @stations.first.nil? || @stations.last.nil?
   end
 
-  # Все три метода в private, так как являются хелперами, не рекомендуемыми к использованию извне
-  def first_station?(station) # Хелперы для определения конечных станций
+  def first_station?(station)
     @stations.first == station
   end
 
@@ -62,7 +61,7 @@ class Route
     @stations.last == station
   end
 
-  def edge_station?(station) # Хелпер для определения крайности станции
+  def edge_station?(station)
     first_station?(station) || last_station?(station)
   end
 end

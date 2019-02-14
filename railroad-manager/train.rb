@@ -4,23 +4,23 @@ require_relative './instance_counter.rb'
 class Train
   include Manufacturer
   include InstanceCounter
-  attr_reader :speed, :carriages, :type, :name # Может возвращать текущую скорость и кол-во вагонов
+  attr_reader :speed, :carriages, :type, :name
 
-  @@all_trains = {}
-  NAME_FORMAT = /^[a-z\d]{3}-?[a-z\d]{2}$/i
-  WRONG_FORMAT = "Номер имеет недопустимый формат!"
-  NIL_TYPE = "Не указан тип поезда!"
+  self.class.all_trains = {}
+  NAME_FORMAT = /^[a-z\d]{3}-?[a-z\d]{2}$/i.freeze
+  WRONG_FORMAT = 'Номер имеет недопустимый формат!'.freeze
+  NIL_TYPE = 'Не указан тип поезда!'.freeze
 
   def self.find(name)
-    @@all_trains[name]
+    self.class.all_trains[name]
   end
 
-  def initialize(name) # Название, тип и кол-во вагонов при инициализации
+  def initialize(name)
     @name = name.to_s
     validate!
     @carriages = []
     stop
-    @@all_trains[name] = self
+    self.class.all_trains[name] = self
     register_instance
   end
 
@@ -34,37 +34,41 @@ class Train
 
   def lose_speed(speed_delta)
     return unless @speed >= speed_delta && speed_delta > 0
+
     @speed -= speed_delta
   end
 
-  def stop # Может останавливаться
+  def stop
     @speed = 0
   end
 
-  def add_carriage(carriage) # Может прицеплять вагон
-    return unless @speed == 0
+  def add_carriage(carriage)
+    return unless @speed.zero?
+
     @carriages << carriage if attachable_carriage?(carriage)
   end
 
-  def remove_carriage(carriage) # Может отцеплять вагон
-    @carriages.delete(carriage) if speed == 0 && @carriages.include?(carriage)
+  def remove_carriage(carriage)
+    @carriages.delete(carriage) if speed.zero? && @carriages.include?(carriage)
   end
 
-  def assign_route(route) # Может принимать маршрут следования
+  def assign_route(route)
     @route = route
     @at_station = 0
-    @route.stations.first.take_train(self) # При назначении маршрута встает на первую станцию
+    @route.stations.first.take_train(self)
   end
 
-  def move_forward # Может двигаться вперед
+  def move_forward
     return unless next_station
+
     current_station.send_train(self)
     next_station.take_train(self)
     @at_station += 1
   end
 
-  def move_backwards # Может двигаться назад
+  def move_backwards
     return unless previous_station
+
     current_station.send_train(self)
     previous_station.take_train(self)
     @at_station -= 1
@@ -77,7 +81,7 @@ class Train
   def valid?
     validate!
     true
-  rescue
+  rescue StandardError
     false
   end
 
