@@ -5,7 +5,7 @@ class Station
   attr_reader :trains, :name
 
   self.class.all_stations = []
-  NAME_FORMAT = /^[a-z]+$/i.freeze
+  NAME_FORMAT = /^[a-z]+$/i
   WRONG_FORMAT = 'Название может содержать только буквы!'.freeze
 
   def self.all

@@ -108,29 +108,26 @@ class App
   end
 
   def create_test_data
-    if no_data?
-      @stations << Station.new('Pavshino')
-      @stations << Station.new('Tushino')
-      @stations << Station.new('Dmitrovskaya')
-      @routes << Route.new(@stations.first, @stations.last)
-      @routes.first.add_station @stations[1]
-      @trains << PassengerTrain.new('HTT-01')
-      @trains << CargoTrain.new('HTT-02')
-      @trains.first.assign_route @routes.first
-      @trains.last.assign_route @routes.first
-      @carriages << PassengerCarriage.new(20)
-      @carriages << PassengerCarriage.new(30)
-      @carriages << CargoCarriage.new(400)
-      @carriages << CargoCarriage.new(600)
-      @trains.first.add_carriage @carriages[0]
-      @trains.first.add_carriage @carriages[1]
-      @trains.last.add_carriage @carriages[2]
-      @trains.last.add_carriage @carriages[3]
-      puts
-      puts 'Данные созданы'
-    else
-      raise DATA_EXISTS
-    end
+    raise DATA_EXISTS unless no_data?
+    @stations << Station.new('Pavshino')
+    @stations << Station.new('Tushino')
+    @stations << Station.new('Dmitrovskaya')
+    @routes << Route.new(@stations.first, @stations.last)
+    @routes.first.add_station @stations[1]
+    @trains << PassengerTrain.new('HTT-01')
+    @trains << CargoTrain.new('HTT-02')
+    @trains.first.assign_route @routes.first
+    @trains.last.assign_route @routes.first
+    @carriages << PassengerCarriage.new(20)
+    @carriages << PassengerCarriage.new(30)
+    @carriages << CargoCarriage.new(400)
+    @carriages << CargoCarriage.new(600)
+    @trains.first.add_carriage @carriages[0]
+    @trains.first.add_carriage @carriages[1]
+    @trains.last.add_carriage @carriages[2]
+    @trains.last.add_carriage @carriages[3]
+    puts
+    puts 'Данные созданы'
   end
 
   def display_carriages
