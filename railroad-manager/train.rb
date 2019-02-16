@@ -1,18 +1,20 @@
 require_relative './manufacturer.rb'
 require_relative './instance_counter.rb'
+require_relative './validation.rb'
 
 class Train
   include Manufacturer
   include InstanceCounter
+  include Validation
+
   attr_reader :speed, :carriages, :type, :name
 
-  self.class.all_trains = {}
-  NAME_FORMAT = /^[a-z\d]{3}-?[a-z\d]{2}$/i.freeze
-  WRONG_FORMAT = 'Номер имеет недопустимый формат!'.freeze
-  NIL_TYPE = 'Не указан тип поезда!'.freeze
+  validate :name, :format, /^[a-z\d]{3}-?[a-z\d]{2}$/i
+
+  @@all_trains = {}
 
   def self.find(name)
-    self.class.all_trains[name]
+    @@all_trains[name]
   end
 
   def initialize(name)
@@ -20,7 +22,7 @@ class Train
     validate!
     @carriages = []
     stop
-    self.class.all_trains[name] = self
+    @@all_trains[name] = self
     register_instance
   end
 
@@ -78,19 +80,7 @@ class Train
     "#{@name}, #{@type}, #{@carriages.length} вагонов"
   end
 
-  def valid?
-    validate!
-    true
-  rescue StandardError
-    false
-  end
-
   protected
-
-  def validate!
-    raise WRONG_FORMAT unless NAME_FORMAT.match? @name
-    raise NIL_TYPE if @type.nil?
-  end
 
   def current_station
     @route.current_station(@at_station)

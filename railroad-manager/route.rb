@@ -1,13 +1,19 @@
 require_relative './instance_counter.rb'
+require_relative './validation.rb'
 
 class Route
   include InstanceCounter
+  include Validation
+
   attr_reader :stations
 
-  NIL_STATIONS = 'Начальная или конечная станция маршрута не задана!'.freeze
+  validate :first_station, :presence
+  validate :last_station, :presence
 
   def initialize(first_station, last_station)
-    @stations = [first_station, last_station]
+    @first_station = first_station
+    @last_station = last_station
+    @stations = [@first_station, @last_station]
     validate!
     register_instance
   end
@@ -40,18 +46,7 @@ class Route
     "#{@stations.first.name} => #{@stations.last.name}"
   end
 
-  def valid?
-    validate!
-    true
-  rescue StandardError
-    false
-  end
-
   private
-
-  def validate!
-    raise NIL_STATIONS if @stations.first.nil? || @stations.last.nil?
-  end
 
   def first_station?(station)
     @stations.first == station

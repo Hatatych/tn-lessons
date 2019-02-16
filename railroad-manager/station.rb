@@ -1,22 +1,25 @@
 require_relative './instance_counter.rb'
+require_relative './validation.rb'
 
 class Station
   include InstanceCounter
+  include Validation
+
   attr_reader :trains, :name
 
-  self.class.all_stations = []
-  NAME_FORMAT = /^[a-z]+$/i
-  WRONG_FORMAT = 'Название может содержать только буквы!'.freeze
+  validate :name, :format, /^[a-z]+$/i
+
+  @@all_stations = []
 
   def self.all
     @@all_stations
   end
 
   def initialize(name)
-    @name = name
+    @name = name.capitalize
     validate!
     @trains = []
-    self.class.all_stations << self
+    @@all_stations << self
     register_instance
   end
 
@@ -38,18 +41,5 @@ class Station
 
   def to_s
     @name
-  end
-
-  def valid?
-    validate!
-    true
-  rescue StandardError
-    false
-  end
-
-  private
-
-  def validate!
-    raise WRONG_FORMAT unless NAME_FORMAT.match? @name
   end
 end
