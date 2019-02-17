@@ -109,6 +109,7 @@ class App
 
   def create_test_data
     raise DATA_EXISTS unless no_data?
+
     @stations << Station.new('Pavshino')
     @stations << Station.new('Tushino')
     @stations << Station.new('Dmitrovskaya')
