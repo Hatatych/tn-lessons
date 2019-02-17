@@ -24,11 +24,8 @@ module Validation
     def validate!
       self.class.settings.each do |setting|
         param_value = instance_variable_get("@#{setting[:param]}".to_sym)
-        case setting[:validation_type]
-        when :presence then send :presence_validation, param_value
-        when :format then send :format_validation, param_value, setting[:option]
-        when :type then send :type_validation, param_value, setting[:option]
-        end
+        method_name = "#{setting[:validation_type]}_validation"
+        send method_name, param_value, setting[:option]
       end
     end
 
